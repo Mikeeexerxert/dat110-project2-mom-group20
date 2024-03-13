@@ -76,12 +76,7 @@ public class Dispatcher extends Stopable {
 		Logger.log("onDeleteTopic: " + msg);
 	}
 	public void onSubscribe(SubscribeMsg msg) {
-		/**Logger.log("onSubscribe: Start - User: " + msg.getUser() + ", Topic: " + msg.getTopic());
-		storage.addSubscriber(msg.getTopic(), msg.getUser());
-		Collection<String> subscribers = storage.getSubscribers(msg.getTopic());
-		Logger.log("onSubscribe: Subscribers for topic " + msg.getTopic() + " - " + subscribers);
-		Logger.log("onSubscribe: End");**/
-		storage.addSubscriber(msg.getTopic(), msg.getUser());
+		storage.addSubscriber(msg.getUser(), msg.getTopic());
 		Logger.log("onSubscribe: " + msg.getUser() + " subscribed to " + msg.getTopic());
 	}
 	public void onUnsubscribe(UnsubscribeMsg msg) {
@@ -89,23 +84,6 @@ public class Dispatcher extends Stopable {
 		Logger.log("onUnsubscribe: " + msg.getUser() + " unsubscribed from " + msg.getTopic());
 	}
 	public void onPublish(PublishMsg msg) {
-		/**Logger.log("onPublish: Start");
-		Collection<String> subscribers = storage.getSubscribers(msg.getTopic());
-		Logger.log("onPublish: Subscribers for topic " + msg.getTopic() + " - " + subscribers);
-		for (String subscriber : subscribers) {
-			ClientSession session = storage.getSession(subscriber);
-			Logger.log("onPublish: Session for subscriber " + subscriber + " - " + session);
-			if (session != null) {
-				session.send(msg);
-				Logger.log("onPublish: Message sent to " + subscriber);
-			}
-			else {
-				Logger.log("onPublish: No session for subscriber " + subscriber);
-			}
-		}
-		Logger.log("onPublish: " + msg);
-		Logger.log("onPublish: End");**/
-
 		storage.getSubscribers(msg.getTopic()).forEach(subscriber -> storage.getSession(subscriber).send(msg));
 		Logger.log("onPublish: " + msg);
 	}
